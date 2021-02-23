@@ -76,6 +76,16 @@ function createBoard() {
       top: options.top,
       left: options.left
     });
+
+    setInterval(() => {
+      const direction = ['ArrowUp', 'ArrowRigth', 'ArrowDown', 'ArrowLeft'];
+      const randomIndex = Math.floor(Math.random() * direction.length);
+      const randomDirection = direction[randomIndex];
+
+      enemy.move(randomDirection);
+    }, 1000)
+    
+
   }
 
   return {
