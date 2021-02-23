@@ -13,7 +13,7 @@ function createBoard() {
   const boardElement = document.getElementById('board');
   
   function createElement(options) {
-    const { item, top, left } = options;
+    let { item, top, left } = options;
 
     const htmlElement = document.createElement('div');
     htmlElement.className = item;
@@ -21,6 +21,36 @@ function createBoard() {
     htmlElement.style.left = `${left}px`;
     
     boardElement.appendChild(htmlElement);
+
+    function getNewDirection(buttonPressed) {
+      switch (buttonPressed) {
+        case 'ArrowUp': 
+          return { top: top - TILE_SIZE, left: left };
+        case 'ArrowRight': 
+          return { top: top, left: left + TILE_SIZE};
+        case 'ArrowDown': 
+          return { top: top + TILE_SIZE, left: left };
+        case 'ArrowLeft': 
+          return { top: top, left: left - TILE_SIZE};
+        
+        default:
+          return { top: top, left: left }
+      }
+    }
+
+    function move(buttonPressed) {
+      console.log('move', buttonPressed);
+
+      const newDirection = getNewDirection(buttonPressed);
+      top =newDirection.top;
+      left =newDirection.left;
+      htmlElement.style.top = `${newDirection.top}px`;
+      htmlElement.style.left = `${newDirection.left}px`;
+    }
+
+    return {
+      move: move
+    }
   }
 
   function createItem(options) {
@@ -28,15 +58,20 @@ function createBoard() {
   }
 
   function createHero(options) {
-    createElement({
+    const hero = createElement({
       item: 'hero',
       top: options.top,
       left: options.left
     });
+
+    document.addEventListener('keydown', (event) => {
+      console.log('keydown foi pressionado', event)
+      hero.move(event.key);
+    })
   }
 
   function createEnemy(options) {
-    createElement({
+    const enemy = createElement({
       item: 'mini-demon',
       top: options.top,
       left: options.left
